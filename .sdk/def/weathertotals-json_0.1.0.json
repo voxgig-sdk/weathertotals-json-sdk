@@ -1,0 +1,3302 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "WeatherTotals JSON API",
+    "version": "1.0.0",
+    "summary": "Free weather data API: JSON, no key",
+    "description": "The WeatherTotals JSON API serves the same figures that appear on the site's pages as structured data. It is free, requires no key or signup, and uses only GET requests.",
+    "termsOfService": "https://weathertotals.com/terms",
+    "contact": {
+      "name": "WeatherTotals",
+      "url": "https://weathertotals.com/contact"
+    },
+    "license": {
+      "name": "CC BY 4.0",
+      "identifier": "CC-BY-4.0"
+    }
+  },
+  "externalDocs": {
+    "url": "https://weathertotals.com/api"
+  },
+  "servers": [
+    {
+      "url": "https://weathertotals.com"
+    }
+  ],
+  "security": [],
+  "tags": [
+    {
+      "name": "snow",
+      "description": "Snowfall totals, season to date and records."
+    },
+    {
+      "name": "rain",
+      "description": "Rainfall totals, year to date and records."
+    },
+    {
+      "name": "hail",
+      "description": "Hail reports and stone sizes."
+    },
+    {
+      "name": "aurora",
+      "description": "Planetary Kp and visibility by state."
+    },
+    {
+      "name": "temperature",
+      "description": "Yesterday's official highs and lows."
+    },
+    {
+      "name": "storms",
+      "description": "Storms clustered from Local Storm Reports, with every report."
+    }
+  ],
+  "paths": {
+    "/api/v1/snow/season": {
+      "get": {
+        "operationId": "getSnowSeason",
+        "summary": "Season-to-date snowfall by state, with the highest measured city per state and the normal to date, in inches.",
+        "tags": [
+          "snow"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 1800 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnowSeason"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/snow/reports": {
+      "get": {
+        "operationId": "getSnowReports",
+        "summary": "For the last 24 hours, nationwide snowfall reports are sorted newest first and include place, amount, source, and time.",
+        "tags": [
+          "snow"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 900 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnowReports"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/snow/{state}/{city}": {
+      "get": {
+        "operationId": "getSnowCity",
+        "summary": "A single city's snowfall data: season to date versus normal, snow days, biggest day, the day-by-day season, all-time records, and monthly normals.",
+        "tags": [
+          "snow"
+        ],
+        "parameters": [
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "description": "State slug as it appears in the page URL, lower case and hyphenated.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-]+$",
+              "examples": [
+                "massachusetts"
+              ]
+            }
+          },
+          {
+            "name": "city",
+            "in": "path",
+            "required": true,
+            "description": "City slug as it appears in the page URL.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-]+$",
+              "examples": [
+                "boston"
+              ]
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          },
+          {
+            "name": "table",
+            "in": "query",
+            "required": false,
+            "description": "With format=csv, which table to return.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "days",
+                "seasons",
+                "records",
+                "thresholds"
+              ],
+              "default": "days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 1800 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnowCity"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Tables: days, seasons, records, thresholds."
+              }
+            }
+          },
+          "404": {
+            "description": "No such city or storm.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/aurora/now": {
+      "get": {
+        "operationId": "getAuroraNow",
+        "summary": "For every state, the current verdict and required Kp are shown, along with the planetary Kp, its time, and the forecast peak.",
+        "tags": [
+          "aurora"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 300 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AuroraNow"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/rain/{state}/{city}": {
+      "get": {
+        "operationId": "getRainCity",
+        "summary": "A single city's rain data: yesterday's official climate report, year to date versus normal, rain days, records, and monthly normals.",
+        "tags": [
+          "rain"
+        ],
+        "parameters": [
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "description": "State slug as it appears in the page URL, lower case and hyphenated.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-]+$",
+              "examples": [
+                "massachusetts"
+              ]
+            }
+          },
+          {
+            "name": "city",
+            "in": "path",
+            "required": true,
+            "description": "City slug as it appears in the page URL.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-]+$",
+              "examples": [
+                "boston"
+              ]
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          },
+          {
+            "name": "table",
+            "in": "query",
+            "required": false,
+            "description": "With format=csv, which table to return.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "days",
+                "months",
+                "records",
+                "thresholds"
+              ],
+              "default": "days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 1800 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RainCity"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                },
+                "description": "Tables: days, months, records, thresholds."
+              }
+            }
+          },
+          "404": {
+            "description": "No such city or storm.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/hail/week": {
+      "get": {
+        "operationId": "getHailWeek",
+        "summary": "For the last seven days, state-by-state hail reports include the largest stone and the most recent 24 hours.",
+        "tags": [
+          "hail"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 900 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HailWeek"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yesterday": {
+      "get": {
+        "operationId": "getYesterday",
+        "summary": "Each tracked city's entry includes yesterday's official high and low, the times they were recorded, departures from normal, records, and rain.",
+        "tags": [
+          "temperature"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 3600 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Yesterday"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/storms/{kind}/{slug}": {
+      "get": {
+        "operationId": "getStorm",
+        "summary": "A storm's summary and all its reports. Slug comes from the address in the storm's page URL, and kind accepts snow, rain or hail.",
+        "tags": [
+          "storms"
+        ],
+        "parameters": [
+          {
+            "name": "kind",
+            "in": "path",
+            "required": true,
+            "description": "The storm's kind.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "snow",
+                "rain",
+                "hail"
+              ]
+            }
+          },
+          {
+            "name": "slug",
+            "in": "path",
+            "required": true,
+            "description": "The storm's address as it appears in the page URL: the event day it began, US Eastern.",
+            "schema": {
+              "type": "string",
+              "pattern": "^\\d{4}-\\d{2}-\\d{2}(-\\d+)?$",
+              "examples": [
+                "2026-09-28"
+              ]
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 900 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Storm"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such city or storm.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/el-nino/{state}": {
+      "get": {
+        "operationId": "getElNinoState",
+        "summary": "For one state, all cities' Dec-Feb precipitation, season snowfall, and temperature, with strong El Niño means since 1950, other-winter means, and white Christmas counts, in inches and degrees F.",
+        "tags": [
+          "el-nino"
+        ],
+        "parameters": [
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "description": "State slug as it appears in the page URL, lower case and hyphenated.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-]+$",
+              "examples": [
+                "massachusetts"
+              ]
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 86400 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ElNinoState"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such city or storm.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/white-christmas": {
+      "get": {
+        "operationId": "getWhiteChristmas",
+        "summary": "For 120 U.S. cities, the share of Christmases since 1950 with at least an inch of snow on the ground, plus most recent white Christmas, 30-year share, El Niño counts.",
+        "tags": [
+          "white-christmas"
+        ],
+        "parameters": [
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 86400 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/WhiteChristmas"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/snowpack/{state}": {
+      "get": {
+        "operationId": "getSnowpackState",
+        "summary": "The snowpack table for a state's SNOTEL stations gives station elevation in feet, snow depth, 7-day change, snow water equivalent, the median for the date and percent of median, plus precipitation and its median in inches.",
+        "tags": [
+          "snowpack"
+        ],
+        "parameters": [
+          {
+            "name": "state",
+            "in": "path",
+            "required": true,
+            "description": "State slug as it appears in the page URL, lower case and hyphenated.",
+            "schema": {
+              "type": "string",
+              "pattern": "^[a-z-]+$",
+              "examples": [
+                "massachusetts"
+              ]
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "description": "csv returns one flat table as text/csv, with comment lines above the header carrying the source, the public domain notice and the page the figures mirror.",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "json",
+                "csv"
+              ],
+              "default": "json"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Cached for 3600 seconds.",
+            "headers": {
+              "RateLimit-Limit": {
+                "schema": {
+                  "type": "integer",
+                  "const": 120
+                },
+                "description": "Requests allowed per minute per IP address."
+              },
+              "RateLimit-Remaining": {
+                "schema": {
+                  "type": "integer"
+                }
+              },
+              "RateLimit-Reset": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds until the window resets."
+              },
+              "Access-Control-Allow-Origin": {
+                "schema": {
+                  "type": "string",
+                  "const": "*"
+                }
+              },
+              "Cache-Control": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SnowpackState"
+                }
+              },
+              "text/csv": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No such city or storm.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Rate limit exceeded.",
+            "headers": {
+              "Retry-After": {
+                "schema": {
+                  "type": "integer"
+                },
+                "description": "Seconds to wait."
+              }
+            },
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Attribution": {
+        "type": "object",
+        "required": [
+          "site",
+          "license",
+          "notice",
+          "sources",
+          "required"
+        ],
+        "properties": {
+          "site": {
+            "type": "string"
+          },
+          "license": {
+            "type": "object",
+            "required": [
+              "name",
+              "spdx",
+              "url"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "const": "CC BY 4.0"
+              },
+              "spdx": {
+                "type": "string",
+                "const": "CC-BY-4.0"
+              },
+              "url": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          },
+          "notice": {
+            "type": "string"
+          },
+          "sources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "required": {
+            "type": "string"
+          }
+        }
+      },
+      "StormReport": {
+        "type": "object",
+        "required": [
+          "inches",
+          "place",
+          "county",
+          "state",
+          "source",
+          "measured",
+          "at",
+          "lat",
+          "lon",
+          "product",
+          "remark"
+        ],
+        "properties": {
+          "inches": {
+            "type": "number"
+          },
+          "place": {
+            "type": "string",
+            "description": "Distance and bearing from a named place, as filed."
+          },
+          "county": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "description": "Two-letter state abbreviation."
+          },
+          "source": {
+            "type": "string",
+            "description": "Who filed the report."
+          },
+          "measured": {
+            "type": "boolean",
+            "description": "True when measured rather than estimated."
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          },
+          "product": {
+            "type": "string",
+            "description": "The NWS product the report came from."
+          },
+          "remark": {
+            "type": [
+              "string",
+              "null"
+            ]
+          }
+        }
+      },
+      "DailyAmount": {
+        "type": "object",
+        "required": [
+          "date",
+          "inches"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "inches": {
+            "type": "number"
+          }
+        }
+      },
+      "LsrReport": {
+        "type": "object",
+        "required": [
+          "inches",
+          "place",
+          "county",
+          "state",
+          "source",
+          "measured",
+          "at",
+          "lat",
+          "lon"
+        ],
+        "properties": {
+          "inches": {
+            "type": "number"
+          },
+          "place": {
+            "type": "string",
+            "description": "Distance and bearing from a named place, as filed."
+          },
+          "county": {
+            "type": "string"
+          },
+          "state": {
+            "type": "string",
+            "description": "Two-letter state abbreviation."
+          },
+          "source": {
+            "type": "string",
+            "description": "Who filed the report."
+          },
+          "measured": {
+            "type": "boolean",
+            "description": "True when measured rather than estimated."
+          },
+          "at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "lat": {
+            "type": "number"
+          },
+          "lon": {
+            "type": "number"
+          }
+        }
+      },
+      "CliReport": {
+        "type": "object",
+        "required": [
+          "date",
+          "precip",
+          "trace",
+          "name"
+        ],
+        "properties": {
+          "date": {
+            "type": "string",
+            "format": "date"
+          },
+          "precip": {
+            "type": "number",
+            "description": "Inches. A trace is 0 with trace true."
+          },
+          "trace": {
+            "type": "boolean"
+          },
+          "precipNormal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "monthToDate": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "monthNormal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "yearToDate": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "yearNormal": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "record": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "recordYears": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            }
+          },
+          "name": {
+            "type": "string",
+            "description": "Station name as the NWS prints it."
+          },
+          "last2Days": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "last3Days": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "last7Days": {
+            "type": [
+              "number",
+              "null"
+            ]
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "api",
+          "error",
+          "docs"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "error": {
+            "type": "string"
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      },
+      "SnowSeason": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/snow"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "season",
+              "unit",
+              "states"
+            ],
+            "properties": {
+              "season": {
+                "type": "string",
+                "examples": [
+                  "2026-27"
+                ]
+              },
+              "unit": {
+                "type": "string",
+                "const": "inches"
+              },
+              "states": {
+                "type": "array",
+                "description": "Highest season total among the cities measured in each state, deepest first.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "state",
+                    "abbr",
+                    "measuredAt",
+                    "seasonToDate",
+                    "normalToDate",
+                    "page",
+                    "cityPage"
+                  ],
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    },
+                    "abbr": {
+                      "type": "string"
+                    },
+                    "measuredAt": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "description": "The city the figure came from."
+                    },
+                    "seasonToDate": {
+                      "type": "number"
+                    },
+                    "normalToDate": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "page": {
+                      "type": "string",
+                      "format": "uri"
+                    },
+                    "cityPage": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uri"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SnowReports": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/snow"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "window",
+              "unit",
+              "count",
+              "highest",
+              "reports"
+            ],
+            "properties": {
+              "window": {
+                "type": "string",
+                "const": "last 24 hours"
+              },
+              "unit": {
+                "type": "string",
+                "const": "inches"
+              },
+              "count": {
+                "type": "integer"
+              },
+              "highest": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/LsrReport"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/LsrReport"
+                },
+                "description": "Newest first."
+              }
+            }
+          }
+        }
+      },
+      "SnowCity": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/snow/massachusetts/boston"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "city",
+              "state",
+              "abbr",
+              "station",
+              "unit",
+              "season",
+              "records"
+            ],
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "abbr": {
+                "type": "string"
+              },
+              "station": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "GHCN-Daily station identifier."
+                  },
+                  "name": {
+                    "type": "string"
+                  }
+                }
+              },
+              "unit": {
+                "type": "string",
+                "const": "inches"
+              },
+              "season": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "total",
+                  "normalToDate",
+                  "snowDays",
+                  "biggestDay",
+                  "latest",
+                  "days"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "examples": [
+                      "2026-27"
+                    ]
+                  },
+                  "total": {
+                    "type": "number"
+                  },
+                  "normalToDate": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "snowDays": {
+                    "type": "integer"
+                  },
+                  "biggestDay": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/DailyAmount"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "latest": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/DailyAmount"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "days": {
+                    "type": "array",
+                    "items": {
+                      "$ref": "#/components/schemas/DailyAmount"
+                    },
+                    "description": "Every day with snow this season, newest first."
+                  }
+                }
+              },
+              "records": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "firstYear",
+                      "biggestDay",
+                      "biggestDays",
+                      "snowiestSeason",
+                      "leastSnowySeason",
+                      "averageSeason",
+                      "completeSeasons",
+                      "monthlyNormals"
+                    ],
+                    "properties": {
+                      "firstYear": {
+                        "type": "integer"
+                      },
+                      "biggestDay": {
+                        "$ref": "#/components/schemas/DailyAmount"
+                      },
+                      "biggestDays": {
+                        "type": "array",
+                        "items": {
+                          "$ref": "#/components/schemas/DailyAmount"
+                        }
+                      },
+                      "snowiestSeason": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "required": [
+                              "season",
+                              "total",
+                              "days"
+                            ],
+                            "properties": {
+                              "season": {
+                                "type": "integer",
+                                "description": "Season start year: 2025 is the 2025-26 season."
+                              },
+                              "total": {
+                                "type": "number"
+                              },
+                              "days": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "leastSnowySeason": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "required": [
+                              "season",
+                              "total",
+                              "days"
+                            ],
+                            "properties": {
+                              "season": {
+                                "type": "integer",
+                                "description": "Season start year: 2025 is the 2025-26 season."
+                              },
+                              "total": {
+                                "type": "number"
+                              },
+                              "days": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "averageSeason": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "completeSeasons": {
+                        "type": "integer"
+                      },
+                      "monthlyNormals": {
+                        "type": "array",
+                        "minItems": 12,
+                        "maxItems": 12,
+                        "items": {
+                          "type": "number"
+                        },
+                        "description": "1991-2020 monthly normals, January first, inches."
+                      }
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "AuroraNow": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/aurora"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "kp",
+              "observedAt",
+              "forecastPeak",
+              "states"
+            ],
+            "properties": {
+              "kp": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 9,
+                "description": "Planetary Kp index."
+              },
+              "observedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "forecastPeak": {
+                "type": [
+                  "number",
+                  "null"
+                ],
+                "description": "Highest Kp in the 3-day outlook."
+              },
+              "states": {
+                "type": "array",
+                "description": "Every state and DC, most likely first.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "state",
+                    "abbr",
+                    "kpNeeded",
+                    "verdict",
+                    "severity",
+                    "score",
+                    "page"
+                  ],
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    },
+                    "abbr": {
+                      "type": "string"
+                    },
+                    "kpNeeded": {
+                      "type": [
+                        "number",
+                        "null"
+                      ],
+                      "description": "Kp the state needs before the aurora is in reach."
+                    },
+                    "verdict": {
+                      "type": "string",
+                      "enum": [
+                        "No chance",
+                        "Unlikely",
+                        "Possible",
+                        "Likely",
+                        "Overhead"
+                      ]
+                    },
+                    "severity": {
+                      "type": "string",
+                      "enum": [
+                        "none",
+                        "low",
+                        "moderate",
+                        "high",
+                        "extreme"
+                      ]
+                    },
+                    "score": {
+                      "type": "number"
+                    },
+                    "page": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "RainCity": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/rain/texas/houston"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "city",
+              "state",
+              "abbr",
+              "station",
+              "unit",
+              "official",
+              "year",
+              "records"
+            ],
+            "properties": {
+              "city": {
+                "type": "string"
+              },
+              "state": {
+                "type": "string"
+              },
+              "abbr": {
+                "type": "string"
+              },
+              "station": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "name",
+                  "cli"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "description": "GHCN-Daily station identifier."
+                  },
+                  "name": {
+                    "type": "string"
+                  },
+                  "cli": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "description": "NWS climate report station, where the airport issues one."
+                  }
+                }
+              },
+              "unit": {
+                "type": "string",
+                "const": "inches"
+              },
+              "official": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/CliReport"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "year": {
+                "type": "object",
+                "required": [
+                  "year",
+                  "total",
+                  "normalToDate",
+                  "rainDays",
+                  "wettest",
+                  "latest",
+                  "through"
+                ],
+                "properties": {
+                  "year": {
+                    "type": "integer"
+                  },
+                  "total": {
+                    "type": "number"
+                  },
+                  "normalToDate": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  },
+                  "rainDays": {
+                    "type": "integer",
+                    "description": "Days of 0.01 inch or more."
+                  },
+                  "wettest": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/DailyAmount"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "latest": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/DailyAmount"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  },
+                  "through": {
+                    "type": [
+                      "string",
+                      "null"
+                    ],
+                    "format": "date",
+                    "description": "Last day the station reported, wet or dry."
+                  }
+                }
+              },
+              "records": {
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "required": [
+                      "firstYear",
+                      "wettestDay",
+                      "wettestYear",
+                      "driestYear",
+                      "averageYear",
+                      "averageRainDays",
+                      "monthlyNormals"
+                    ],
+                    "properties": {
+                      "firstYear": {
+                        "type": "integer"
+                      },
+                      "wettestDay": {
+                        "$ref": "#/components/schemas/DailyAmount"
+                      },
+                      "wettestYear": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "required": [
+                              "year",
+                              "total",
+                              "days"
+                            ],
+                            "properties": {
+                              "year": {
+                                "type": "integer"
+                              },
+                              "total": {
+                                "type": "number"
+                              },
+                              "days": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "driestYear": {
+                        "oneOf": [
+                          {
+                            "type": "object",
+                            "required": [
+                              "year",
+                              "total",
+                              "days"
+                            ],
+                            "properties": {
+                              "year": {
+                                "type": "integer"
+                              },
+                              "total": {
+                                "type": "number"
+                              },
+                              "days": {
+                                "type": "integer"
+                              }
+                            }
+                          },
+                          {
+                            "type": "null"
+                          }
+                        ]
+                      },
+                      "averageYear": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "averageRainDays": {
+                        "type": [
+                          "number",
+                          "null"
+                        ]
+                      },
+                      "monthlyNormals": {
+                        "type": "array",
+                        "minItems": 12,
+                        "maxItems": 12,
+                        "items": {
+                          "type": "number"
+                        },
+                        "description": "1991-2020 monthly normals, January first, inches."
+                      }
+                    }
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              }
+            }
+          }
+        }
+      },
+      "HailWeek": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/hail"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "window",
+              "unit",
+              "total",
+              "largest",
+              "last24h",
+              "states"
+            ],
+            "properties": {
+              "window": {
+                "type": "string",
+                "const": "last 7 days"
+              },
+              "unit": {
+                "type": "string",
+                "const": "inches (stone diameter)"
+              },
+              "total": {
+                "type": "integer"
+              },
+              "largest": {
+                "oneOf": [
+                  {
+                    "$ref": "#/components/schemas/LsrReport"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "last24h": {
+                "type": "object",
+                "required": [
+                  "count",
+                  "top"
+                ],
+                "properties": {
+                  "count": {
+                    "type": "integer"
+                  },
+                  "top": {
+                    "oneOf": [
+                      {
+                        "$ref": "#/components/schemas/LsrReport"
+                      },
+                      {
+                        "type": "null"
+                      }
+                    ]
+                  }
+                }
+              },
+              "states": {
+                "type": "array",
+                "description": "Most reports first.",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "state",
+                    "abbr",
+                    "reports",
+                    "largest",
+                    "page"
+                  ],
+                  "properties": {
+                    "state": {
+                      "type": "string"
+                    },
+                    "abbr": {
+                      "type": "string"
+                    },
+                    "reports": {
+                      "type": "integer"
+                    },
+                    "largest": {
+                      "type": "number",
+                      "description": "Largest stone in the window, inches, or 0."
+                    },
+                    "page": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "Storm": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/rain/storms/2026-09-09"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "kind",
+              "slug",
+              "startedAt",
+              "endedAt",
+              "states",
+              "unit",
+              "reportCount",
+              "top",
+              "reports"
+            ],
+            "properties": {
+              "kind": {
+                "type": "string",
+                "enum": [
+                  "snow",
+                  "rain",
+                  "hail"
+                ]
+              },
+              "slug": {
+                "type": "string",
+                "description": "The storm's address, the event day it began (US Eastern), with -2, -3 on a collision."
+              },
+              "startedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "endedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "states": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                },
+                "description": "Two-letter abbreviations of every state with a report."
+              },
+              "unit": {
+                "type": "string"
+              },
+              "reportCount": {
+                "type": "integer"
+              },
+              "top": {
+                "type": "object",
+                "required": [
+                  "inches",
+                  "place",
+                  "county",
+                  "state",
+                  "at"
+                ],
+                "properties": {
+                  "inches": {
+                    "type": "number"
+                  },
+                  "place": {
+                    "type": "string"
+                  },
+                  "county": {
+                    "type": "string"
+                  },
+                  "state": {
+                    "type": "string"
+                  },
+                  "at": {
+                    "type": "string",
+                    "format": "date-time"
+                  }
+                }
+              },
+              "reports": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/StormReport"
+                },
+                "description": "Largest first."
+              }
+            }
+          }
+        }
+      },
+      "Yesterday": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/yesterday"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "date",
+              "units",
+              "cities"
+            ],
+            "properties": {
+              "date": {
+                "type": "string",
+                "format": "date"
+              },
+              "units": {
+                "type": "object",
+                "required": [
+                  "temperature",
+                  "precip"
+                ],
+                "properties": {
+                  "temperature": {
+                    "type": "string",
+                    "const": "F"
+                  },
+                  "precip": {
+                    "type": "string",
+                    "const": "inches"
+                  }
+                }
+              },
+              "cities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "required": [
+                    "city",
+                    "state",
+                    "abbr",
+                    "station",
+                    "page",
+                    "report"
+                  ],
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "abbr": {
+                      "type": "string"
+                    },
+                    "station": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "page": {
+                      "type": [
+                        "string",
+                        "null"
+                      ],
+                      "format": "uri"
+                    },
+                    "report": {
+                      "oneOf": [
+                        {
+                          "type": "object",
+                          "required": [
+                            "date",
+                            "high",
+                            "low",
+                            "precip",
+                            "trace"
+                          ],
+                          "properties": {
+                            "date": {
+                              "type": "string",
+                              "format": "date"
+                            },
+                            "high": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "highTime": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "highNormal": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "highDepart": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "highRecord": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "highRecordYears": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              }
+                            },
+                            "low": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "lowTime": {
+                              "type": [
+                                "string",
+                                "null"
+                              ]
+                            },
+                            "lowNormal": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "lowDepart": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "lowRecord": {
+                              "type": [
+                                "integer",
+                                "null"
+                              ]
+                            },
+                            "lowRecordYears": {
+                              "type": "array",
+                              "items": {
+                                "type": "integer"
+                              }
+                            },
+                            "precip": {
+                              "type": [
+                                "number",
+                                "null"
+                              ]
+                            },
+                            "trace": {
+                              "type": "boolean"
+                            }
+                          }
+                        },
+                        {
+                          "type": "null",
+                          "description": "The station has not filed a report for that day."
+                        }
+                      ]
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "ElNinoState": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/el-nino/colorado"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "state",
+              "abbr",
+              "units",
+              "strongWinters",
+              "medians",
+              "cities",
+              "pageUrl"
+            ],
+            "properties": {
+              "state": {
+                "type": "string"
+              },
+              "abbr": {
+                "type": "string"
+              },
+              "units": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "strongWinters": {
+                "type": "array",
+                "items": {
+                  "type": "string"
+                }
+              },
+              "medians": {
+                "type": "object",
+                "properties": {
+                  "precipitationPercentChange": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "snowfallPercentChange": {
+                    "type": [
+                      "integer",
+                      "null"
+                    ]
+                  },
+                  "temperatureDifference": {
+                    "type": [
+                      "number",
+                      "null"
+                    ]
+                  }
+                }
+              },
+              "cities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    },
+                    "slug": {
+                      "type": "string"
+                    },
+                    "station": {
+                      "type": "string"
+                    },
+                    "precipitation": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/EnsoComparison"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "snowfall": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/EnsoComparison"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "temperature": {
+                      "oneOf": [
+                        {
+                          "$ref": "#/components/schemas/EnsoComparison"
+                        },
+                        {
+                          "type": "null"
+                        }
+                      ]
+                    },
+                    "whiteChristmas": {
+                      "type": "object",
+                      "properties": {
+                        "strong": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "strongYears": {
+                          "type": "integer"
+                        },
+                        "other": {
+                          "type": [
+                            "integer",
+                            "null"
+                          ]
+                        },
+                        "otherYears": {
+                          "type": "integer"
+                        }
+                      }
+                    }
+                  }
+                }
+              },
+              "pageUrl": {
+                "type": "string",
+                "format": "uri"
+              }
+            }
+          }
+        }
+      },
+      "EnsoComparison": {
+        "type": "object",
+        "properties": {
+          "strongMean": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "otherMean": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "difference": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "percentChange": {
+            "type": [
+              "integer",
+              "null"
+            ]
+          },
+          "strongWinters": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "winter": {
+                  "type": "string"
+                },
+                "value": {
+                  "type": [
+                    "number",
+                    "null"
+                  ]
+                }
+              }
+            }
+          },
+          "strongAboveOther": {
+            "type": "integer"
+          },
+          "otherWinters": {
+            "type": "integer"
+          }
+        }
+      },
+      "WhiteChristmas": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/guide/white-christmas"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "snowDepthInchesAtLeast",
+              "date",
+              "since",
+              "units",
+              "cities"
+            ],
+            "properties": {
+              "snowDepthInchesAtLeast": {
+                "type": "number"
+              },
+              "date": {
+                "type": "string"
+              },
+              "since": {
+                "type": "integer"
+              },
+              "units": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "cities": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "city": {
+                      "type": "string"
+                    },
+                    "state": {
+                      "type": "string"
+                    },
+                    "abbr": {
+                      "type": "string"
+                    },
+                    "share": {
+                      "type": "integer"
+                    },
+                    "white": {
+                      "type": "integer"
+                    },
+                    "reported": {
+                      "type": "integer"
+                    },
+                    "last": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "recentShare": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "strongElNino": {
+                      "type": "object",
+                      "properties": {
+                        "white": {
+                          "type": "integer"
+                        },
+                        "reported": {
+                          "type": "integer"
+                        }
+                      }
+                    },
+                    "lat": {
+                      "type": "number"
+                    },
+                    "lon": {
+                      "type": "number"
+                    },
+                    "page": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "SnowpackState": {
+        "type": "object",
+        "required": [
+          "api",
+          "asOf",
+          "page",
+          "docs",
+          "attribution",
+          "data"
+        ],
+        "properties": {
+          "api": {
+            "type": "string",
+            "const": "v1"
+          },
+          "asOf": {
+            "type": "string",
+            "format": "date-time",
+            "description": "When the response was assembled, or the observation time where one applies."
+          },
+          "page": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/snowpack/colorado"
+            ]
+          },
+          "docs": {
+            "type": "string",
+            "format": "uri",
+            "examples": [
+              "https://weathertotals.com/api"
+            ]
+          },
+          "attribution": {
+            "$ref": "#/components/schemas/Attribution"
+          },
+          "data": {
+            "type": "object",
+            "required": [
+              "state",
+              "abbr",
+              "units",
+              "indexDate",
+              "stations"
+            ],
+            "properties": {
+              "state": {
+                "type": "string"
+              },
+              "abbr": {
+                "type": "string"
+              },
+              "units": {
+                "type": "object",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "indexDate": {
+                "type": [
+                  "string",
+                  "null"
+                ]
+              },
+              "stations": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "station": {
+                      "type": "string"
+                    },
+                    "triplet": {
+                      "type": "string"
+                    },
+                    "elevationFeet": {
+                      "type": "number"
+                    },
+                    "lat": {
+                      "type": "number"
+                    },
+                    "lon": {
+                      "type": "number"
+                    },
+                    "date": {
+                      "type": [
+                        "string",
+                        "null"
+                      ]
+                    },
+                    "swe": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "sweMedian": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "percentOfMedian": {
+                      "type": [
+                        "integer",
+                        "null"
+                      ]
+                    },
+                    "depth": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "change7": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "precip": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "precipMedian": {
+                      "type": [
+                        "number",
+                        "null"
+                      ]
+                    },
+                    "page": {
+                      "type": "string",
+                      "format": "uri"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,19 @@
+{
+  "files": [
+    "SUMMARY.md"
+  ],
+  "config": ".sdk/doc/qa/vale.ini",
+  "routes": {},
+  "quoted": {
+    "SUMMARY.md": [
+      "Cached for 1800 seconds",
+      "Cached for 300 seconds",
+      "Cached for 3600 seconds",
+      "Cached for 86400 seconds",
+      "Cached for 900 seconds",
+      "GHCN-Daily station identifier.",
+      "The WeatherTotals JSON API serves the same figures that appear on the site&#39;s pages as structured data. It is free, requires no key or signup, and uses only GET requests.",
+      "When the response was assembled, or the observation time where one applies."
+    ]
+  }
+}

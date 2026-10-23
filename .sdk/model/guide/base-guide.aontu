@@ -1,0 +1,79 @@
+# Generated from the API definition and overwritten on every build: do not
+# edit this file. Put customizations in the guide entry file, which includes
+# this one and overrides its defaults:
+#   guide.aontu
+
+guide: {
+  metrics: count: entity: 11
+  metrics: count: path: 11
+  metrics: count: method: 11
+
+  entity: aurora_now: {
+    path: "/api/v1/aurora/now": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: el_nino: {
+    path: "/api/v1/el-nino/{state}": {
+      rename: param: "state": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: hail_week: {
+    path: "/api/v1/hail/week": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: rain: {
+    path: "/api/v1/rain/{state}/{city}": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: snow: {
+    path: "/api/v1/snow/{state}/{city}": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: snow_report: {
+    path: "/api/v1/snow/reports": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: snow_season: {
+    path: "/api/v1/snow/season": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: snowpack: {
+    path: "/api/v1/snowpack/{state}": {
+      rename: param: "state": *"id"
+      op: load: method: *GET
+    }
+  }
+
+  entity: storm: {
+    path: "/api/v1/storms/{kind}/{slug}": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: white_christma: {
+    path: "/api/v1/white-christmas": {
+      op: load: method: *GET
+    }
+  }
+
+  entity: yesterday: {
+    path: "/api/v1/yesterday": {
+      op: load: method: *GET
+    }
+  }
+
+}

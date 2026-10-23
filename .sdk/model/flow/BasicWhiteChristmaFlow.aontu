@@ -1,0 +1,28 @@
+# BasicWhiteChristmaFlow
+
+main: kit: flow: BasicWhiteChristmaFlow:
+{
+  entity: "white_christma",
+  kind: "basic",
+  name: "BasicWhiteChristmaFlow",
+  step: [
+    {
+      i: {
+        ref: "white_christma_ref01",
+        srcdatavar: "white_christma_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-white_christma_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicWhiteChristmaFlow"
+}

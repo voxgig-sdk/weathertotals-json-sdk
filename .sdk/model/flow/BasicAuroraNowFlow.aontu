@@ -1,0 +1,28 @@
+# BasicAuroraNowFlow
+
+main: kit: flow: BasicAuroraNowFlow:
+{
+  entity: "aurora_now",
+  kind: "basic",
+  name: "BasicAuroraNowFlow",
+  step: [
+    {
+      i: {
+        ref: "aurora_now_ref01",
+        srcdatavar: "aurora_now_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-aurora_now_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicAuroraNowFlow"
+}

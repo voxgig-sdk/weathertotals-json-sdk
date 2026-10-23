@@ -1,0 +1,151 @@
+# Entity: storm
+
+main: kit: entity: storm: {
+
+  alias: field: {}
+
+  fields: {
+    api: {
+      h: "Api"
+      n: "api"
+      r: true
+      t: "`$STRING`"
+    }
+    asOf: {
+      fo: "date-time"
+      h: "As Of"
+      n: "asOf"
+      r: true
+      sh: "When the response was assembled, or the observation time where one applies."
+      t: "`$STRING`"
+    }
+    attribution: {
+      h: "Attribution"
+      n: "attribution"
+      r: true
+      t: "`$OBJECT`"
+    }
+    data: {
+      h: "Data"
+      n: "data"
+      r: true
+      t: "`$OBJECT`"
+    }
+    docs: {
+      fo: "uri"
+      h: "Docs"
+      n: "docs"
+      r: true
+      t: "`$STRING`"
+    }
+    id: {
+      h: "Id"
+      n: "id"
+      r: false
+      t: "`$STRING`"
+    }
+    page: {
+      fo: "uri"
+      h: "Page"
+      n: "page"
+      r: true
+      t: "`$STRING`"
+    }
+  }
+
+  id: {
+    field: "id"
+    name: "id"
+    parts: [
+      "kind"
+      "slug"
+    ]
+    sep: "/"
+  }
+
+  name: "storm"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/storms/{kind}/{slug}"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            params: [
+              {
+                k: "param"
+                n: "kind"
+                or: "kind"
+                r: true
+                t: "`$STRING`"
+              }
+              {
+                k: "param"
+                n: "slug"
+                or: "slug"
+                r: true
+                t: "`$STRING`"
+              }
+            ]
+            query: [
+              {
+                ex: "json"
+                k: "query"
+                n: "format"
+                or: "format"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/storms/{kind}/{slug}"
+          q: {
+            exist: [
+              "kind"
+              "slug"
+            ]
+          }
+          rs: {
+            alternatives: [
+              {
+                kind: "raw"
+                media: "text/csv"
+              }
+            ]
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "storms"
+            }
+            {
+              var: "kind"
+            }
+            {
+              var: "slug"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

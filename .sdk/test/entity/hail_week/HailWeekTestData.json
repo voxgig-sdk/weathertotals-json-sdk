@@ -1,0 +1,52 @@
+{
+  "existing": {
+    "hail_week": {
+      "HAIL_WEEK00": {
+        "api": "s3c",
+        "asOf": "s3d",
+        "attribution": {},
+        "data": {},
+        "docs": "s40",
+        "page": "s41",
+        "id": "HAIL_WEEK00"
+      },
+      "HAIL_WEEK01": {
+        "api": "s78",
+        "asOf": "s79",
+        "attribution": {},
+        "data": {},
+        "docs": "s7c",
+        "page": "s7d",
+        "id": "HAIL_WEEK01"
+      },
+      "HAIL_WEEK02": {
+        "api": "sb4",
+        "asOf": "sb5",
+        "attribution": {},
+        "data": {},
+        "docs": "sb8",
+        "page": "sb9",
+        "id": "HAIL_WEEK02"
+      }
+    }
+  },
+  "new": {
+    "hail_week": {
+      "hail_week_ref01": {
+        "api": "sf0",
+        "asOf": "sf1",
+        "attribution": {},
+        "data": {},
+        "docs": "sf4",
+        "page": "sf5"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/hail/week": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

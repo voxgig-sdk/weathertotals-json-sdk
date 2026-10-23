@@ -1,0 +1,58 @@
+{
+  "existing": {
+    "storm": {
+      "STORM00": {
+        "api": "s46",
+        "asOf": "s47",
+        "attribution": {},
+        "data": {},
+        "docs": "s4a",
+        "id": "STORM00",
+        "page": "s4c",
+        "kind": "KIND01",
+        "slug": "SLUG01"
+      },
+      "STORM01": {
+        "api": "s8c",
+        "asOf": "s8d",
+        "attribution": {},
+        "data": {},
+        "docs": "s90",
+        "id": "STORM01",
+        "page": "s92",
+        "kind": "KIND01",
+        "slug": "SLUG01"
+      },
+      "STORM02": {
+        "api": "sd2",
+        "asOf": "sd3",
+        "attribution": {},
+        "data": {},
+        "docs": "sd6",
+        "id": "STORM02",
+        "page": "sd8",
+        "kind": "KIND01",
+        "slug": "SLUG01"
+      }
+    }
+  },
+  "new": {
+    "storm": {
+      "storm_ref01": {
+        "api": "s118",
+        "asOf": "s119",
+        "attribution": {},
+        "data": {},
+        "docs": "s11c",
+        "page": "s11e"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/storms/{kind}/{slug}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+# BasicSnowReportFlow
+
+main: kit: flow: BasicSnowReportFlow:
+{
+  entity: "snow_report",
+  kind: "basic",
+  name: "BasicSnowReportFlow",
+  step: [
+    {
+      i: {
+        ref: "snow_report_ref01",
+        srcdatavar: "snow_report_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-snow_report_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSnowReportFlow"
+}

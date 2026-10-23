@@ -1,0 +1,52 @@
+{
+  "existing": {
+    "snow_season": {
+      "SNOW_SEASON00": {
+        "api": "s3c",
+        "asOf": "s3d",
+        "attribution": {},
+        "data": {},
+        "docs": "s40",
+        "page": "s41",
+        "id": "SNOW_SEASON00"
+      },
+      "SNOW_SEASON01": {
+        "api": "s78",
+        "asOf": "s79",
+        "attribution": {},
+        "data": {},
+        "docs": "s7c",
+        "page": "s7d",
+        "id": "SNOW_SEASON01"
+      },
+      "SNOW_SEASON02": {
+        "api": "sb4",
+        "asOf": "sb5",
+        "attribution": {},
+        "data": {},
+        "docs": "sb8",
+        "page": "sb9",
+        "id": "SNOW_SEASON02"
+      }
+    }
+  },
+  "new": {
+    "snow_season": {
+      "snow_season_ref01": {
+        "api": "sf0",
+        "asOf": "sf1",
+        "attribution": {},
+        "data": {},
+        "docs": "sf4",
+        "page": "sf5"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/snow/season": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

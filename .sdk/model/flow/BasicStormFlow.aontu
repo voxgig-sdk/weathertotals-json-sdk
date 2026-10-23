@@ -1,0 +1,33 @@
+# BasicStormFlow
+
+main: kit: flow: BasicStormFlow:
+{
+  entity: "storm",
+  kind: "basic",
+  name: "BasicStormFlow",
+  step: [
+    {
+      i: {
+        ref: "storm_ref01",
+        srcdatavar: "storm_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "storm01",
+        kind: "kind01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-storm_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicStormFlow"
+}

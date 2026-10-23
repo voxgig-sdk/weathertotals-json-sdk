@@ -1,0 +1,13 @@
+# Entity Models
+
+@"./aurora_now.aontu"
+@"./el_nino.aontu"
+@"./hail_week.aontu"
+@"./rain.aontu"
+@"./snow.aontu"
+@"./snow_report.aontu"
+@"./snow_season.aontu"
+@"./snowpack.aontu"
+@"./storm.aontu"
+@"./white_christma.aontu"
+@"./yesterday.aontu"

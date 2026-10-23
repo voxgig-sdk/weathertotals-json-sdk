@@ -1,0 +1,28 @@
+# BasicYesterdayFlow
+
+main: kit: flow: BasicYesterdayFlow:
+{
+  entity: "yesterday",
+  kind: "basic",
+  name: "BasicYesterdayFlow",
+  step: [
+    {
+      i: {
+        ref: "yesterday_ref01",
+        srcdatavar: "yesterday_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-yesterday_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicYesterdayFlow"
+}

@@ -1,0 +1,30 @@
+# API Information
+
+
+main: {
+  kit: {
+    info: {
+      auth: false
+      contact: {
+        name: "WeatherTotals"
+        url: "https://weathertotals.com/contact"
+      }
+      description: "The WeatherTotals JSON API serves the same figures that appear on the site's pages as structured data. It is free, requires no key or signup, and uses only GET requests."
+      license: {
+        identifier: "CC-BY-4.0"
+        name: "CC BY 4.0"
+      }
+      servers: [
+        {
+          url: "https://weathertotals.com"
+        }
+      ]
+      summary: "Free weather data API: JSON, no key"
+      termsOfService: "https://weathertotals.com/terms"
+      title: "WeatherTotals JSON API"
+      version: "1.0.0"
+      website: "https://weathertotals.com/api"
+    }
+  }
+}
+

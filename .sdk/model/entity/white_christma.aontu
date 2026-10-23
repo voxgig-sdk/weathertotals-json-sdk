@@ -1,0 +1,107 @@
+# Entity: white_christma
+
+main: kit: entity: white_christma: {
+
+  alias: field: {}
+
+  fields: {
+    api: {
+      h: "Api"
+      n: "api"
+      r: true
+      t: "`$STRING`"
+    }
+    asOf: {
+      fo: "date-time"
+      h: "As Of"
+      n: "asOf"
+      r: true
+      sh: "When the response was assembled, or the observation time where one applies."
+      t: "`$STRING`"
+    }
+    attribution: {
+      h: "Attribution"
+      n: "attribution"
+      r: true
+      t: "`$OBJECT`"
+    }
+    data: {
+      h: "Data"
+      n: "data"
+      r: true
+      t: "`$OBJECT`"
+    }
+    docs: {
+      fo: "uri"
+      h: "Docs"
+      n: "docs"
+      r: true
+      t: "`$STRING`"
+    }
+    page: {
+      fo: "uri"
+      h: "Page"
+      n: "page"
+      r: true
+      t: "`$STRING`"
+    }
+  }
+
+  name: "white_christma"
+  op: {
+    load: {
+      name: "load"
+      points: [
+        {
+          co: {
+            id: "GET /api/v1/white-christmas"
+            source: "openapi3"
+            version: 2
+          }
+          g: {
+            query: [
+              {
+                ex: "json"
+                k: "query"
+                n: "format"
+                or: "format"
+                r: false
+                t: "`$STRING`"
+              }
+            ]
+          }
+          m: "GET"
+          o: "/api/v1/white-christmas"
+          rs: {
+            alternatives: [
+              {
+                kind: "raw"
+                media: "text/csv"
+              }
+            ]
+            kind: "json"
+            media: "application/json"
+          }
+          s: [
+            {
+              lit: "api"
+            }
+            {
+              lit: "v1"
+            }
+            {
+              lit: "white-christmas"
+            }
+          ]
+          t: {
+            req: "`reqdata`"
+            res: "`body`"
+          }
+        }
+      ]
+    }
+  }
+
+
+
+}

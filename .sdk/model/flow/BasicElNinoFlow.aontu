@@ -1,0 +1,32 @@
+# BasicElNinoFlow
+
+main: kit: flow: BasicElNinoFlow:
+{
+  entity: "el_nino",
+  kind: "basic",
+  name: "BasicElNinoFlow",
+  step: [
+    {
+      i: {
+        ref: "el_nino_ref01",
+        srcdatavar: "el_nino_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "el_nino01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-el_nino_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicElNinoFlow"
+}

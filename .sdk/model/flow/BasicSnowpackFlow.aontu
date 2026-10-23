@@ -1,0 +1,32 @@
+# BasicSnowpackFlow
+
+main: kit: flow: BasicSnowpackFlow:
+{
+  entity: "snowpack",
+  kind: "basic",
+  name: "BasicSnowpackFlow",
+  step: [
+    {
+      i: {
+        ref: "snowpack_ref01",
+        srcdatavar: "snowpack_ref01_data",
+        suffix: "_dt0"
+      }
+
+      m: {
+        id: "snowpack01"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-snowpack_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSnowpackFlow"
+}

@@ -1,0 +1,28 @@
+# BasicHailWeekFlow
+
+main: kit: flow: BasicHailWeekFlow:
+{
+  entity: "hail_week",
+  kind: "basic",
+  name: "BasicHailWeekFlow",
+  step: [
+    {
+      i: {
+        ref: "hail_week_ref01",
+        srcdatavar: "hail_week_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-hail_week_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicHailWeekFlow"
+}

@@ -1,0 +1,28 @@
+# BasicSnowSeasonFlow
+
+main: kit: flow: BasicSnowSeasonFlow:
+{
+  entity: "snow_season",
+  kind: "basic",
+  name: "BasicSnowSeasonFlow",
+  step: [
+    {
+      i: {
+        ref: "snow_season_ref01",
+        srcdatavar: "snow_season_ref01_data",
+        suffix: "_dt0"
+      }
+
+      o: "load",
+      v: [
+        {
+          apply: "TextFieldMark",
+          def: {
+            mark: "Mark01-snow_season_ref01"
+          }
+        }
+      ]
+    }
+  ],
+  "key$": "BasicSnowSeasonFlow"
+}

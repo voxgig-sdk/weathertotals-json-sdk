@@ -1,0 +1,67 @@
+import { AuroraNowEntity } from './entity/AuroraNowEntity';
+import { ElNinoEntity } from './entity/ElNinoEntity';
+import { HailWeekEntity } from './entity/HailWeekEntity';
+import { RainEntity } from './entity/RainEntity';
+import { SnowEntity } from './entity/SnowEntity';
+import { SnowReportEntity } from './entity/SnowReportEntity';
+import { SnowSeasonEntity } from './entity/SnowSeasonEntity';
+import { SnowpackEntity } from './entity/SnowpackEntity';
+import { StormEntity } from './entity/StormEntity';
+import { WhiteChristmaEntity } from './entity/WhiteChristmaEntity';
+import { YesterdayEntity } from './entity/YesterdayEntity';
+export type * from './WeathertotalsJsonTypes';
+import { inspect } from 'node:util';
+import type { Context, Feature } from './types';
+import { config } from './Config';
+import { WeathertotalsJsonEntityBase } from './WeathertotalsJsonEntityBase';
+import { Utility } from './utility/Utility';
+import { BaseFeature } from './feature/base/BaseFeature';
+declare const stdutil: Utility;
+type DirectResult = {
+    ok: false;
+    err: any;
+    status?: undefined;
+    headers?: undefined;
+    data?: undefined;
+} | {
+    ok: boolean;
+    status: number;
+    headers: any;
+    data: any;
+    err?: any;
+};
+declare class WeathertotalsJsonSDK {
+    _mode: string;
+    _options: any;
+    _utility: Utility;
+    _features: Feature[];
+    _rootctx: Context;
+    constructor(options?: any);
+    options(): any;
+    utility(): any;
+    prepare(fetchargs?: any): Promise<any>;
+    direct(fetchargs?: any): Promise<DirectResult>;
+    _rawRequest(fetchargs?: any): Promise<DirectResult>;
+    graphql(query: string, variables?: any, ctrl?: any): Promise<any>;
+    AuroraNow(entopts?: Record<string, any>): AuroraNowEntity;
+    ElNino(entopts?: Record<string, any>): ElNinoEntity;
+    HailWeek(entopts?: Record<string, any>): HailWeekEntity;
+    Rain(entopts?: Record<string, any>): RainEntity;
+    Snow(entopts?: Record<string, any>): SnowEntity;
+    SnowReport(entopts?: Record<string, any>): SnowReportEntity;
+    SnowSeason(entopts?: Record<string, any>): SnowSeasonEntity;
+    Snowpack(entopts?: Record<string, any>): SnowpackEntity;
+    Storm(entopts?: Record<string, any>): StormEntity;
+    WhiteChristma(entopts?: Record<string, any>): WhiteChristmaEntity;
+    Yesterday(entopts?: Record<string, any>): YesterdayEntity;
+    static test(testoptsarg?: any, sdkoptsarg?: any): WeathertotalsJsonSDK;
+    tester(testopts?: any, sdkopts?: any): WeathertotalsJsonSDK;
+    toJSON(): {
+        name: string;
+    };
+    toString(): string;
+    [inspect.custom](): string;
+}
+declare const SDK: typeof WeathertotalsJsonSDK;
+export { stdutil, config, BaseFeature, WeathertotalsJsonEntityBase, WeathertotalsJsonSDK, SDK, };
+export type { DirectResult };

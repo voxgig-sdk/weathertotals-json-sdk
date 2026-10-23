@@ -1,0 +1,52 @@
+{
+  "existing": {
+    "el_nino": {
+      "EL_NINO00": {
+        "api": "s46",
+        "asOf": "s47",
+        "attribution": {},
+        "data": {},
+        "docs": "s4a",
+        "id": "EL_NINO00",
+        "page": "s4c"
+      },
+      "EL_NINO01": {
+        "api": "s8c",
+        "asOf": "s8d",
+        "attribution": {},
+        "data": {},
+        "docs": "s90",
+        "id": "EL_NINO01",
+        "page": "s92"
+      },
+      "EL_NINO02": {
+        "api": "sd2",
+        "asOf": "sd3",
+        "attribution": {},
+        "data": {},
+        "docs": "sd6",
+        "id": "EL_NINO02",
+        "page": "sd8"
+      }
+    }
+  },
+  "new": {
+    "el_nino": {
+      "el_nino_ref01": {
+        "api": "s118",
+        "asOf": "s119",
+        "attribution": {},
+        "data": {},
+        "docs": "s11c",
+        "page": "s11e"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/el-nino/{state}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

@@ -1,0 +1,58 @@
+{
+  "existing": {
+    "rain": {
+      "RAIN00": {
+        "api": "s46",
+        "asOf": "s47",
+        "attribution": {},
+        "data": {},
+        "docs": "s4a",
+        "id": "RAIN00",
+        "page": "s4c",
+        "city": "CITY01",
+        "state": "STATE01"
+      },
+      "RAIN01": {
+        "api": "s8c",
+        "asOf": "s8d",
+        "attribution": {},
+        "data": {},
+        "docs": "s90",
+        "id": "RAIN01",
+        "page": "s92",
+        "city": "CITY01",
+        "state": "STATE01"
+      },
+      "RAIN02": {
+        "api": "sd2",
+        "asOf": "sd3",
+        "attribution": {},
+        "data": {},
+        "docs": "sd6",
+        "id": "RAIN02",
+        "page": "sd8",
+        "city": "CITY01",
+        "state": "STATE01"
+      }
+    }
+  },
+  "new": {
+    "rain": {
+      "rain_ref01": {
+        "api": "s118",
+        "asOf": "s119",
+        "attribution": {},
+        "data": {},
+        "docs": "s11c",
+        "page": "s11e"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/rain/{state}/{city}": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}

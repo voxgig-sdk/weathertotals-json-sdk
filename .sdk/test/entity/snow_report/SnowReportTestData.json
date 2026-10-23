@@ -1,0 +1,52 @@
+{
+  "existing": {
+    "snow_report": {
+      "SNOW_REPORT00": {
+        "api": "s3c",
+        "asOf": "s3d",
+        "attribution": {},
+        "data": {},
+        "docs": "s40",
+        "page": "s41",
+        "id": "SNOW_REPORT00"
+      },
+      "SNOW_REPORT01": {
+        "api": "s78",
+        "asOf": "s79",
+        "attribution": {},
+        "data": {},
+        "docs": "s7c",
+        "page": "s7d",
+        "id": "SNOW_REPORT01"
+      },
+      "SNOW_REPORT02": {
+        "api": "sb4",
+        "asOf": "sb5",
+        "attribution": {},
+        "data": {},
+        "docs": "sb8",
+        "page": "sb9",
+        "id": "SNOW_REPORT02"
+      }
+    }
+  },
+  "new": {
+    "snow_report": {
+      "snow_report_ref01": {
+        "api": "sf0",
+        "asOf": "sf1",
+        "attribution": {},
+        "data": {},
+        "docs": "sf4",
+        "page": "sf5"
+      }
+    }
+  },
+  "requests": {
+    "GET /api/v1/snow/reports": {
+      "provenance": "operation-contract",
+      "version": 2,
+      "source": "openapi3"
+    }
+  }
+}
